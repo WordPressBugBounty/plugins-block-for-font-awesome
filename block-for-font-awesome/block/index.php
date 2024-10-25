@@ -43,7 +43,9 @@ function getbutterfly_fa_block_enqueue() {
             'wp-i18n',
             'wp-editor',
             'wp-components',
-        ]
+        ],
+        GBFA_PLUGIN_VERSION,
+        true
     );
 }
 

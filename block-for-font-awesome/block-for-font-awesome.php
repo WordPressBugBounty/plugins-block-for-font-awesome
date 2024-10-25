@@ -3,7 +3,7 @@
  * Plugin Name: Block for Font Awesome
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
  * Description: Display a Font Awesome 5, Font Awesome 6 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.4.6
+ * Version: 1.5.0
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
@@ -32,9 +32,9 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.4.6' );
+define( 'GBFA_PLUGIN_VERSION', '1.5.0' );
 define( 'GBFA5_VERSION', '5.15.4' );
-define( 'GBFA6_VERSION', '6.5.2' );
+define( 'GBFA6_VERSION', '6.6.0' );
 
 require_once 'block/index.php';
 
@@ -181,8 +181,8 @@ function getbutterfly_fa_build_admin_page() {
         <h1>Font Awesome Settings</h1>
 
         <h2 class="nav-tab-wrapper">
-            <a href="<?php echo $section; ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
-            <a href="<?php echo $section; ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
+            <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
+            <a href="<?php echo esc_attr( $section ); ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
         </h2>
 
         <?php
@@ -190,26 +190,25 @@ function getbutterfly_fa_build_admin_page() {
             global $wpdb;
 
             if ( isset( $_POST['save_fa_settings'] ) && wp_verify_nonce( $_POST['save_fa_settings_nonce_field'], 'save_fa_settings_nonce' ) ) {
-                update_option( 'fa_enqueue_fe', (int) sanitize_text_field( $_POST['fa_enqueue_fe'] ) );
-                update_option( 'fa_enqueue_be', (int) sanitize_text_field( $_POST['fa_enqueue_be'] ) );
+                update_option( 'fa_enqueue_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fe'] ?? 0 ) ) );
+                update_option( 'fa_enqueue_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_be'] ?? 0 ) ) );
 
-                update_option( 'fa_enqueue_fa6_source', (int) sanitize_text_field( $_POST['fa_enqueue_fa6_source'] ) );
-                update_option( 'fa_enqueue_fa6_fe', (int) sanitize_text_field( $_POST['fa_enqueue_fa6_fe'] ) );
-                update_option( 'fa_enqueue_fa6_be', (int) sanitize_text_field( $_POST['fa_enqueue_fa6_be'] ) );
+                update_option( 'fa_enqueue_fa6_source', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_source'] ?? 0 ) ) );
+                update_option( 'fa_enqueue_fa6_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_fe'] ?? 0 ) ) );
+                update_option( 'fa_enqueue_fa6_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_be'] ?? 0 ) ) );
 
-                update_option( 'fa_enqueue_kit', sanitize_url( $_POST['fa_enqueue_kit'] ) );
-                update_option( 'fa_enqueue_kit_fe', (int) sanitize_text_field( $_POST['fa_enqueue_kit_fe'] ) );
-                update_option( 'fa_enqueue_kit_be', (int) sanitize_text_field( $_POST['fa_enqueue_kit_be'] ) );
+                update_option( 'fa_enqueue_kit', sanitize_url( wp_unslash( $_POST['fa_enqueue_kit'] ?? '' ) ) );
+                update_option( 'fa_enqueue_kit_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_kit_fe'] ?? 0 ) ) );
+                update_option( 'fa_enqueue_kit_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_kit_be'] ?? 0 ) ) );
 
-                if ( is_array( $_POST['fa_external_css'] ) ) {
-                    $fa_external_css = array_map( 'sanitize_text_field', $_POST['fa_external_css'] );
-                } else {
-                    $fa_external_css = [];
+                $fa_external_css = [];
+                if ( isset( $_POST['fa_external_css'] ) && is_array( $_POST['fa_external_css'] ) ) {
+                    $fa_external_css = array_map( 'sanitize_text_field', wp_unslash( $_POST['fa_external_css'] ?? '' ) );
                 }
                 update_option( 'fa_external_css', $fa_external_css );
 
-                update_option( 'fa_enqueue_local_fe', (int) sanitize_text_field( $_POST['fa_enqueue_local_fe'] ) );
-                update_option( 'fa_enqueue_local_be', (int) sanitize_text_field( $_POST['fa_enqueue_local_be'] ) );
+                update_option( 'fa_enqueue_local_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_local_fe'] ?? 0 ) ) );
+                update_option( 'fa_enqueue_local_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_local_be'] ?? 0 ) ) );
 
                 delete_option( 'fa_enqueue_fa6_setup' );
 
@@ -227,10 +226,6 @@ function getbutterfly_fa_build_admin_page() {
                 </div>
                 <div class="gb-ad--footer">
                     <p>For support, feature requests and bug reporting, please visit the <a href="https://getbutterfly.com/" rel="external">official website</a>.<br>Built by <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <a href="https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/">Documentation</a> &middot; <small>Code wrangling since 2005</small></p>
-
-                    <p>
-                        <small>You are using PHP <?php echo PHP_VERSION; ?> and MySQL <?php echo $wpdb->db_version(); ?>.</small>
-                    </p>
                 </div>
             </div>
 
@@ -243,7 +238,7 @@ function getbutterfly_fa_build_admin_page() {
                 <table class="form-table">
                     <tbody>
                         <tr>
-                            <th scope="row"><label>Font Awesome <?php echo GBFA5_VERSION; ?></label></th>
+                            <th scope="row"><label>Font Awesome <?php echo esc_attr( GBFA5_VERSION ); ?></label></th>
                             <td>
                                 <p>
                                     <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fe" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fe' ) ); ?>> Enqueue on front-end
@@ -260,7 +255,7 @@ function getbutterfly_fa_build_admin_page() {
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><label>Font Awesome <?php echo GBFA6_VERSION; ?></label></th>
+                            <th scope="row"><label>Font Awesome <?php echo esc_attr( GBFA6_VERSION ); ?></label></th>
                             <td>
                                 <p>
                                     <label for="fa_enqueue_fa6_source">Font Awesome Source</label><br>
@@ -287,7 +282,7 @@ function getbutterfly_fa_build_admin_page() {
                             <th scope="row"><label>Font Awesome Kit</label></th>
                             <td>
                                 <p>
-                                    <input type="url" class="regular-text" name="fa_enqueue_kit" value="<?php echo (string) get_option( 'fa_enqueue_kit' ); ?>"> Kit URL
+                                    <input type="url" class="regular-text" name="fa_enqueue_kit" value="<?php echo esc_url_raw( get_option( 'fa_enqueue_kit' ) ); ?>"> Kit URL
                                     <br><small>e.g. <code>https://kit.fontawesome.com/123a456bcd.js</code></small>
                                 </p>
                                 <p>
@@ -313,10 +308,10 @@ function getbutterfly_fa_build_admin_page() {
                                     <summary>Example stylesheet URLs</summary>
 
                                     <p>
-                                        1. <code><?php echo home_url( '/' ); ?>cdn/font-awesome/css/sharp-thin.css</code><br>
-                                        2. <code><?php echo home_url( '/' ); ?>cdn/font-awesome/css/sharp-solid.css</code><br>
-                                        3. <code><?php echo home_url( '/' ); ?>cdn/font-awesome/css/duotone.css</code><br>
-                                        4. <code><?php echo home_url( '/' ); ?>resources/css/my-custom-stylesheet.css</code><br>
+                                        1. <code><?php echo esc_url_raw( home_url( '/' ) ); ?>cdn/font-awesome/css/sharp-thin.css</code><br>
+                                        2. <code><?php echo esc_url_raw( home_url( '/' ) ); ?>cdn/font-awesome/css/sharp-solid.css</code><br>
+                                        3. <code><?php echo esc_url_raw( home_url( '/' ) ); ?>cdn/font-awesome/css/duotone.css</code><br>
+                                        4. <code><?php echo esc_url_raw( home_url( '/' ) ); ?>resources/css/my-custom-stylesheet.css</code><br>
                                     </p>
                                 </details>
 
@@ -330,7 +325,7 @@ function getbutterfly_fa_build_admin_page() {
                                         foreach ( $gbfa_external_resources as $resource ) {
                                             ?>
                                             <p>
-                                                <input type="url" class="large-text" placeholder="https://" name="fa_external_css[]" value="<?php echo $resource; ?>">
+                                                <input type="url" class="large-text" placeholder="https://" name="fa_external_css[]" value="<?php echo esc_url_raw( $resource ); ?>">
                                             </p>
                                             <?php
                                         }
@@ -389,7 +384,7 @@ function getbutterfly_fa_build_admin_page() {
 
             <hr>
             <p>For support, feature requests and bug reporting, please visit the <a href="https://getbutterfly.com/" rel="external">official website</a>. If you enjoy this plugin, don't forget to rate it. Also, try our other WordPress plugins at <a href="https://getbutterfly.com/wordpress-plugins/" rel="external" target="_blank">getButterfly.com</a>.</p>
-            <p>&copy;<?php echo gmdate( 'Y' ); ?> <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <small>Code wrangling since 2005</small></p>
+            <p>&copy;<?php echo esc_attr( gmdate( 'Y' ) ); ?> <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <small>Code wrangling since 2005</small></p>
         <?php } ?>
     </div>
     <?php

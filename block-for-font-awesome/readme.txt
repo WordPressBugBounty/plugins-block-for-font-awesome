@@ -1,10 +1,10 @@
 === Block for Font Awesome ===
 Contributors: butterflymedia
 Tags: fontawesome, font, icon, pictogram, fa
-Requires at least: 5.8
-Tested up to: 6.6
+Requires at least: 6.4
+Tested up to: 6.6.2
 Requires PHP: 7.1
-Stable tag: 1.4.6
+Stable tag: 1.5.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,6 +31,13 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 3. Icon settings
 
 == Changelog ==
+
+= 1.5.0 =
+* SECURITY: Further sanitize and escape all settings
+* UPDATE: Update Font Awesome 6 to 6.6.0 (from 6.5.2)
+* UPDATE: Add useBlockProps from wp.blockEditor
+* UPDATE: Add PanelBody to the variable declarations at the top
+* UPDATE: Change wp.editor.InspectorControls to wp.blockEditor.InspectorControls since wp.editor is deprecated
 
 = 1.4.6 =
 * FIX: Fix external CSS array not being initialized when saving settings

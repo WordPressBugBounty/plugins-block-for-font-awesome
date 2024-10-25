@@ -30,8 +30,6 @@
     border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-
-
 /**
  * Checkbox Toggle UI
  */
@@ -57,7 +55,7 @@ input[type="checkbox"].wppd-ui-toggle:focus {
     box-shadow: none;
 }
 input[type="checkbox"].wppd-ui-toggle:after {
-    content: '';
+    content: "";
     font-size: 8px;
     font-weight: 400;
     line-height: 18px;
@@ -71,7 +69,7 @@ input[type="checkbox"].wppd-ui-toggle:after {
     box-shadow: 0 0 12px rgb(0 0 0 / 15%) inset;
 }
 input[type="checkbox"].wppd-ui-toggle:before {
-    content: '';
+    content: "";
     width: 14px;
     height: 14px;
     display: block;
@@ -92,14 +90,12 @@ input[type="checkbox"].wppd-ui-toggle:before,
 input[type="checkbox"].wppd-ui-toggle:after,
 input[type="checkbox"].wppd-ui-toggle:checked:before,
 input[type="checkbox"].wppd-ui-toggle:checked:after {
-    transition: ease .15s;
+    transition: ease 0.15s;
 }
 input[type="checkbox"].wppd-ui-toggle:checked:after {
-    content: 'ON';
+    content: "ON";
     background-color: #2271b1;
 }
-
-
 
 .hr-sect {
     display: flex;

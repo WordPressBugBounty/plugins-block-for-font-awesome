@@ -1,17 +1,18 @@
 /**
  * Register editor block
  */
-(function(blocks, editor, components, i18n, element) {
+(function (blocks, editor, components, i18n, element) {
     var el = element.createElement;
     var registerBlockType = wp.blocks.registerBlockType;
-
-    var InspectorControls = wp.editor.InspectorControls;
+    var useBlockProps = wp.blockEditor.useBlockProps;
+    var InspectorControls = wp.blockEditor.InspectorControls;
 
     var TextControl = wp.components.TextControl;
     var SelectControl = wp.components.SelectControl;
     var ServerSideRender = wp.serverSideRender;
     var ToggleControl = wp.components.ToggleControl;
     var ColorPicker = wp.components.ColorPicker;
+    var PanelBody = wp.components.PanelBody;
 
     registerBlockType('getbutterfly/font-awesome', {
         title: 'Font Awesome Icon',
@@ -63,19 +64,22 @@
             var newTab = attributes.newTab;
             var faAlign = attributes.faAlign;
 
+            // Get block props
+            var blockProps = useBlockProps();
+
             return [
                 el(InspectorControls, { key: 'inspector' },
                     el(
-                        components.PanelBody, {
-                            title: i18n.__('Icon Settings'),
-                            className: 'getbutterfly_block',
-                            initialOpen: true,
-                        },
+                        PanelBody, {
+                        title: i18n.__('Icon Settings'),
+                        className: 'getbutterfly_block',
+                        initialOpen: true,
+                    },
 
                         el(TextControl, {
                             type: 'string',
                             label: i18n.__('Icon class'),
-                            placeholder:  i18n.__('fas fa-sync-alt'),
+                            placeholder: i18n.__('fas fa-sync-alt'),
                             help: i18n.__('Icon Font Awesome class, including fixed width or animations. Custom classes are also allowed.'),
                             value: faClass,
                             onChange: function (new_faClass) {
@@ -113,6 +117,7 @@
                         el(SelectControl, {
                             type: 'string',
                             label: i18n.__('Icon alignment'),
+                            value: faAlign,
                             options: [
                                 { label: i18n.__('Left'), value: 'left' },
                                 { label: i18n.__('Center'), value: 'center' },
@@ -133,10 +138,12 @@
                         }),
                     ),
                 ),
-                el(ServerSideRender, {
-                    block: 'getbutterfly/font-awesome',
-                    attributes: props.attributes
-                }),
+                el('div', blockProps,
+                    el(ServerSideRender, {
+                        block: 'getbutterfly/font-awesome',
+                        attributes: props.attributes
+                    })
+                )
             ];
         },
 

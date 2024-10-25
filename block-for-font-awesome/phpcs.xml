@@ -5,6 +5,8 @@
     <file>.</file>
 
     <!-- Exclude paths -->
+    <exclude-pattern>/vendor/</exclude-pattern>
+    <exclude-pattern>/languages/</exclude-pattern>
     <exclude-pattern>*.js</exclude-pattern>
 
     <!-- Show progress, show the error codes for each message (source) -->
@@ -17,6 +19,7 @@
     <rule ref="WordPress-Core">
         <exclude name="Generic.WhiteSpace.DisallowSpaceIndent" />
         <exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+        <exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
         <exclude name="WordPress.PHP.DisallowShortTernary.Found" />
         <exclude name="WordPress.PHP.YodaConditions" />
     </rule>
@@ -32,4 +35,15 @@
         </properties>
     </rule>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
+
+    <!-- Allow short syntax arrays. -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+    <!-- Disallow long array syntax -->
+    <rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="Universal.Arrays.DisallowShortArraySyntax.Found">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
 </ruleset>
