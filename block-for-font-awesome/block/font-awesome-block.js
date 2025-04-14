@@ -11,8 +11,8 @@
     var SelectControl = wp.components.SelectControl;
     var ServerSideRender = wp.serverSideRender;
     var ToggleControl = wp.components.ToggleControl;
-    var ColorPicker = wp.components.ColorPicker;
     var PanelBody = wp.components.PanelBody;
+    var ColorPalette = wp.components.ColorPalette;
 
     registerBlockType('getbutterfly/font-awesome', {
         title: 'Font Awesome Icon',
@@ -30,7 +30,7 @@
         attributes: {
             faClass: {
                 type: 'string',
-                default: '',
+                default: 'fa-solid fa-wand-magic-sparkles',
             },
             faColor: {
                 type: 'string',
@@ -52,6 +52,10 @@
                 type: 'string',
                 default: 'left',
             },
+            faSize: {
+                type: 'string',
+                default: '',
+            },
         },
 
         edit: function (props) {
@@ -63,6 +67,7 @@
             var fixedWidth = attributes.fixedWidth;
             var newTab = attributes.newTab;
             var faAlign = attributes.faAlign;
+            var faSize = attributes.faSize;
 
             // Get block props
             var blockProps = useBlockProps();
@@ -75,12 +80,11 @@
                         className: 'getbutterfly_block',
                         initialOpen: true,
                     },
-
                         el(TextControl, {
                             type: 'string',
                             label: i18n.__('Icon class'),
-                            placeholder: i18n.__('fas fa-sync-alt'),
-                            help: i18n.__('Icon Font Awesome class, including fixed width or animations. Custom classes are also allowed.'),
+                            placeholder: i18n.__('fa-solid fa-wand-magic-sparkles'),
+                            help: i18n.__('Font Awesome class, including fixed width or animations. Custom classes are also allowed.'),
                             value: faClass,
                             onChange: function (new_faClass) {
                                 props.setAttributes({ faClass: new_faClass });
@@ -98,8 +102,7 @@
                         }),
                         el(ToggleControl, {
                             type: 'boolean',
-                            label: i18n.__('Fixed width'),
-                            help: i18n.__('Whether to use a fixed-width icon.'),
+                            label: i18n.__('Fixed width (add the fa-fw class)'),
                             checked: !!fixedWidth,
                             onChange: function (new_fixedWidth) {
                                 props.setAttributes({ fixedWidth: new_fixedWidth });
@@ -107,8 +110,7 @@
                         }),
                         el(ToggleControl, {
                             type: 'boolean',
-                            label: i18n.__('Open in new tab'),
-                            help: i18n.__('Whether to open the link in a new tab.'),
+                            label: i18n.__('Open link in new tab'),
                             checked: !!newTab,
                             onChange: function (new_newTab) {
                                 props.setAttributes({ newTab: new_newTab });
@@ -127,15 +129,36 @@
                                 props.setAttributes({ faAlign: new_faAlign });
                             },
                         }),
-                        el(ColorPicker, {
+                        el(SelectControl, {
                             type: 'string',
-                            label: i18n.__('Icon Colour'),
-                            color: faColor,
-                            enableAlpha: true,
-                            onChange: function (new_faColor) {
-                                props.setAttributes({ faColor: new_faColor });
+                            label: i18n.__('Icon Size'),
+                            value: faSize,
+                            options: [
+                                { label: i18n.__('Default'), value: '' },
+                                { label: i18n.__('1x'), value: 'fa-1x' },
+                                { label: i18n.__('2x'), value: 'fa-2x' },
+                                { label: i18n.__('3x'), value: 'fa-3x' },
+                                { label: i18n.__('4x'), value: 'fa-4x' },
+                                { label: i18n.__('5x'), value: 'fa-5x' },
+                                { label: i18n.__('6x'), value: 'fa-6x' },
+                                { label: i18n.__('7x'), value: 'fa-7x' },
+                                { label: i18n.__('8x'), value: 'fa-8x' },
+                                { label: i18n.__('9x'), value: 'fa-9x' },
+                                { label: i18n.__('10x'), value: 'fa-10x' },
+                            ],
+                            onChange: function (new_faSize) {
+                                props.setAttributes({ faSize: new_faSize });
                             },
                         }),
+                        el('div', { className: 'components-base-control' },
+                            el('p', { className: 'components-base-control__label' }, i18n.__('Icon Color')),
+                            el(ColorPalette, {
+                                value: faColor,
+                                onChange: function (new_faColor) {
+                                    props.setAttributes({ faColor: new_faColor });
+                                },
+                            }),
+                        ),
                     ),
                 ),
                 el('div', blockProps,

@@ -1,10 +1,10 @@
 === Block for Font Awesome ===
 Contributors: butterflymedia
-Tags: fontawesome, font, icon, pictogram, fa
+Tags: font awesome, font, icon, pictogram, fa
 Requires at least: 6.4
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.1
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,6 +31,13 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 3. Icon settings
 
 == Changelog ==
+
+= 1.6.0 =
+* FEATURE: Add icon size
+* UPDATE: Add a default icon class so the icon is visible in the editor
+* UPDATE: Update Font Awesome 6 to 6.7.2 (from 6.6.0)
+* UPDATE: Update color picker to use ColorPalette
+* UPDATE: Update WordPress compatibility
 
 = 1.5.0 =
 * SECURITY: Further sanitize and escape all settings

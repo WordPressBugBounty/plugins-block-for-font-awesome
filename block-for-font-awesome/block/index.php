@@ -91,16 +91,19 @@ function getbutterfly_fa_block_init() {
         // Fixed width
         $fixed_width = ( 1 !== (int) esc_attr( $attributes['fixedWidth'] ) ) ? '' : ' fa-fw';
 
+        // Icon size
+        $fa_size = ! empty( $attributes['faSize'] ) ? ' ' . esc_attr( $attributes['faSize'] ) : '';
+
         // New tab
         $new_tab = ( 1 !== (int) esc_attr( $attributes['newTab'] ) ) ? '' : 'target="_blank" rel="external noopener"';
 
         if ( ! empty( $link ) ) {
             return '<div class="' . $align . '">
-                <a href="' . $link . '" ' . $new_tab . '><i class="' . $class . $fixed_width . '" style="color: ' . $color . ';"></i></a>
+                <a href="' . $link . '" ' . $new_tab . '><i class="' . $class . $fixed_width . $fa_size . '" style="color: ' . $color . ';"></i></a>
             </div>';
         }
 
-        return '<div class="' . $align . '"><i class="' . $class . $fixed_width . '" style="color: ' . $color . ';"></i></div>';
+        return '<div class="' . $align . '"><i class="' . $class . $fixed_width . $fa_size . '" style="color: ' . $color . ';"></i></div>';
     }
 
     register_block_type(
@@ -131,6 +134,10 @@ function getbutterfly_fa_block_init() {
                 'faAlign'    => [
                     'type'    => 'string',
                     'default' => 'left',
+                ],
+                'faSize'     => [
+                    'type'    => 'string',
+                    'default' => '',
                 ],
             ],
         ]
