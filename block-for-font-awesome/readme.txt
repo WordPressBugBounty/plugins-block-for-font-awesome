@@ -2,9 +2,9 @@
 Contributors: butterflymedia
 Tags: font awesome, font, icon, pictogram, fa
 Requires at least: 6.4
-Tested up to: 6.8
+Tested up to: 6.8.1
 Requires PHP: 7.1
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,6 +31,9 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 3. Icon settings
 
 == Changelog ==
+
+= 1.6.1 =
+* UPDATE: Add support for "icon" shortcode for easier migration from Font Awesome 5 to Font Awesome 6+
 
 = 1.6.0 =
 * FEATURE: Add icon size
