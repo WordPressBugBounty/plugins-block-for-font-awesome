@@ -93,7 +93,7 @@ input[type="checkbox"].wppd-ui-toggle:checked:after {
     transition: ease 0.15s;
 }
 input[type="checkbox"].wppd-ui-toggle:checked:after {
-    content: "ON";
+    content: "";
     background-color: #2271b1;
 }
 

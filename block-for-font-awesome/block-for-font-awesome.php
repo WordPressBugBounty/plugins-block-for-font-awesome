@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Block for Font Awesome
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
- * Description: Display a Font Awesome 5, Font Awesome 6 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.6.1
+ * Description: Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
+ * Version: 1.7.0
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
@@ -32,24 +32,32 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.6.1' );
+define( 'GBFA_PLUGIN_VERSION', '1.7.0' );
 define( 'GBFA5_VERSION', '5.15.4' );
 define( 'GBFA6_VERSION', '6.7.2' );
+define( 'GBFA7_VERSION', '7.0.0' );
 
 require_once 'block/index.php';
 
 
 
-/**
- * Font Awesome 5
- */
-function getbutterfly_fa_enqueue() {
-    wp_enqueue_script( 'fa5', 'https://use.fontawesome.com/releases/v' . GBFA5_VERSION . '/js/all.js', [], GBFA5_VERSION, true );
+function getbutterfly_fa_enqueue_all() {
+    /**
+     * Font Awesome 7
+     */
+    if ( (int) get_option( 'fa_enqueue_fa7_fe' ) === 1 ) {
+        getbutterfly_fa7_enqueue();
+    }
+
+    /**
+     * Font Awesome 5
+     */
+    if ( (int) get_option( 'fa_enqueue_fe' ) === 1 ) {
+        wp_enqueue_script( 'fa5', 'https://use.fontawesome.com/releases/v' . GBFA5_VERSION . '/js/all.js', [], GBFA5_VERSION, true );
+    }
 }
 
-if ( (int) get_option( 'fa_enqueue_fe' ) === 1 ) {
-    add_action( 'wp_enqueue_scripts', 'getbutterfly_fa_enqueue' );
-}
+add_action( 'wp_enqueue_scripts', 'getbutterfly_fa_enqueue_all' );
 
 
 
@@ -83,6 +91,21 @@ function getbutterfly_fa6_enqueue() {
         }
     }
 }
+
+
+
+/**
+ * Font Awesome 7
+ */
+function getbutterfly_fa7_enqueue() {
+    if ( (int) get_option( 'fa_enqueue_fa7_source' ) === 1 ) {
+        wp_enqueue_script( 'fa7', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/' . GBFA7_VERSION . '/js/all.min.js', [], GBFA7_VERSION, true );
+    } elseif ( (int) get_option( 'fa_enqueue_fa7_source' ) === 0 ) {
+        wp_enqueue_script( 'fa7', 'https://use.fontawesome.com/releases/v' . GBFA7_VERSION . '/js/all.js', [], GBFA7_VERSION, true );
+    }
+}
+
+
 
 if (
     (int) get_option( 'fa_enqueue_fa6_fe' ) === 1 ||
@@ -129,6 +152,10 @@ function getbutterfly_fa_enqueue_scripts() {
             }
         }
     }
+
+    if ( (int) get_option( 'fa_enqueue_fa7_be' ) === 1 ) {
+        getbutterfly_fa7_enqueue();
+    }
 }
 
 add_action( 'admin_enqueue_scripts', 'getbutterfly_fa_enqueue_scripts' );
@@ -151,8 +178,13 @@ function getbutterfly_fa_on_activation() {
     add_option( 'fa_enqueue_fe', 0 );
     add_option( 'fa_enqueue_be', 0 );
 
-    add_option( 'fa_enqueue_fa6_fe', 0 );
-    add_option( 'fa_enqueue_fa6_be', 0 );
+    add_option( 'fa_enqueue_fa6_fe', 1 );
+    add_option( 'fa_enqueue_fa6_be', 1 );
+    add_option( 'fa_enqueue_fa6_source', '' );
+
+    add_option( 'fa_enqueue_fa7_fe', 0 );
+    add_option( 'fa_enqueue_fa7_be', 0 );
+    add_option( 'fa_enqueue_fa7_source', '' );
 
     add_option( 'fa_enqueue_kit_fe', 0 );
     add_option( 'fa_enqueue_kit_be', 0 );
@@ -160,7 +192,6 @@ function getbutterfly_fa_on_activation() {
     add_option( 'fa_enqueue_local_fe', 0 );
     add_option( 'fa_enqueue_local_be', 0 );
 
-    add_option( 'fa_enqueue_fa6_source', '' );
     add_option( 'fa_enqueue_kit', '' );
 
     delete_option( 'fa_enqueue_fa6_setup' );
@@ -193,6 +224,10 @@ function getbutterfly_fa_build_admin_page() {
             if ( isset( $_POST['save_fa_settings'] ) && wp_verify_nonce( $_POST['save_fa_settings_nonce_field'], 'save_fa_settings_nonce' ) ) {
                 update_option( 'fa_enqueue_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fe'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_be'] ?? 0 ) ) );
+
+                update_option( 'fa_enqueue_fa7_source', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa7_source'] ?? 0 ) ) );
+                update_option( 'fa_enqueue_fa7_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa7_fe'] ?? 0 ) ) );
+                update_option( 'fa_enqueue_fa7_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa7_be'] ?? 0 ) ) );
 
                 update_option( 'fa_enqueue_fa6_source', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_source'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_fa6_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_fe'] ?? 0 ) ) );
@@ -230,7 +265,7 @@ function getbutterfly_fa_build_admin_page() {
                 </div>
             </div>
 
-            <p>Use Font Awesome 5 <strong>or</strong> Font Awesome 6 <strong>or</strong> a custom kit. Do not use all of them, as the kit will overwrite all other options and Font Awesome 6 will overwrite Font Awesome 5 and you will run into performance issues.</p>
+            <p>Use Font Awesome 5 <strong>or</strong> Font Awesome 6 <strong>or</strong> Font Awesome 7 <strong>or</strong> a custom kit. Do not use all of them, as the kit will overwrite all other options and Font Awesome 6 will overwrite Font Awesome 5 and you will run into performance issues.</p>
             <p>Note that you can have different versions in front-end and back-end.</p>
 
             <form method="post">
@@ -246,6 +281,30 @@ function getbutterfly_fa_build_admin_page() {
                                 </p>
                                 <p>
                                     <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_be" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_be' ) ); ?>> Enqueue on back-end
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>
+                                <div class="hr-sect">OR</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label>Font Awesome <?php echo esc_attr( GBFA7_VERSION ); ?></label></th>
+                            <td>
+                                <p>
+                                    <label for="fa_enqueue_fa7_source">Font Awesome Source</label><br>
+                                    <select name="fa_enqueue_fa7_source" id="fa_enqueue_fa7_source">
+                                        <option value="1" <?php selected( (int) get_option( 'fa_enqueue_fa7_source' ), 1, true ); ?>>CDNJS</option>
+                                        <option value="0" <?php selected( (int) get_option( 'fa_enqueue_fa7_source' ), 0, true ); ?>>Font Awesome CDN (recommended)</option>
+                                    </select>
+                                </p>
+                                <p>
+                                    <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fa7_fe" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fa7_fe' ) ); ?>> Enqueue on front-end
+                                </p>
+                                <p>
+                                    <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fa7_be" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fa7_be' ) ); ?>> Enqueue on back-end
                                 </p>
                             </td>
                         </tr>
@@ -378,7 +437,7 @@ function getbutterfly_fa_build_admin_page() {
         <?php } elseif ( $tab === 'help' ) { ?>
             <h2><span class="dashicons dashicons-editor-help"></span> Help</h2>
 
-            <p>This plugin allows you to display a Font Awesome 5, Font Awesome 6 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.</p>
+            <p>This plugin allows you to display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.</p>
             <p>You can also display inline icons by using the <code>[fa class="fas fa-fw fa-3x fa-phone"]</code> shortcode.</p>
 
             <p><a href="https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/" class="button button-primary">Documentation</a></p>
