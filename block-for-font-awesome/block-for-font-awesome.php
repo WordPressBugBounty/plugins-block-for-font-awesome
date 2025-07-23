@@ -3,7 +3,7 @@
  * Plugin Name: Block for Font Awesome
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
  * Description: Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.7.0
+ * Version: 1.7.1
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
@@ -32,7 +32,7 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.7.0' );
+define( 'GBFA_PLUGIN_VERSION', '1.7.1' );
 define( 'GBFA5_VERSION', '5.15.4' );
 define( 'GBFA6_VERSION', '6.7.2' );
 define( 'GBFA7_VERSION', '7.0.0' );
@@ -42,18 +42,30 @@ require_once 'block/index.php';
 
 
 function getbutterfly_fa_enqueue_all() {
-    /**
-     * Font Awesome 7
-     */
+    // Font Awesome 7
     if ( (int) get_option( 'fa_enqueue_fa7_fe' ) === 1 ) {
         getbutterfly_fa7_enqueue();
     }
 
-    /**
-     * Font Awesome 5
-     */
+    // Font Awesome 6
+    if ( (int) get_option( 'fa_enqueue_fa6_fe' ) === 1 ) {
+        getbutterfly_fa6_enqueue();
+    }
+
+    // Font Awesome 5
     if ( (int) get_option( 'fa_enqueue_fe' ) === 1 ) {
         wp_enqueue_script( 'fa5', 'https://use.fontawesome.com/releases/v' . GBFA5_VERSION . '/js/all.js', [], GBFA5_VERSION, true );
+    }
+
+    // Font Awesome Kit
+    if ( (string) get_option( 'fa_enqueue_kit' ) !== '' && (int) get_option( 'fa_enqueue_kit_fe' ) === 1 ) {
+        wp_enqueue_script( 'fa', get_option( 'fa_enqueue_kit' ), [], GBFA_PLUGIN_VERSION, true );
+        wp_script_add_data( 'fa', [ 'crossorigin' ], [ 'anonymous' ] );
+    }
+
+    // Local stylesheets
+    if ( (int) get_option( 'fa_enqueue_local_fe' ) === 1 ) {
+        getbutterfly_fa_enqueue_local();
     }
 }
 
@@ -62,32 +74,19 @@ add_action( 'wp_enqueue_scripts', 'getbutterfly_fa_enqueue_all' );
 
 
 /**
- * Font Awesome 6
+ * Font Awesome Local Stylesheets
  */
-function getbutterfly_fa6_enqueue() {
-    if ( (string) get_option( 'fa_enqueue_kit' ) !== '' && (int) get_option( 'fa_enqueue_kit_fe' ) === 1 ) {
-        wp_enqueue_script( 'fa6', get_option( 'fa_enqueue_kit' ), [], GBFA_PLUGIN_VERSION, true );
-        wp_script_add_data( 'fa6', [ 'crossorigin' ], [ 'anonymous' ] );
-    } else {
-        if ( (int) get_option( 'fa_enqueue_fa6_source' ) === 1 ) {
-            wp_enqueue_script( 'fa6', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/' . GBFA6_VERSION . '/js/all.min.js', [], GBFA6_VERSION, true );
-        } elseif ( (int) get_option( 'fa_enqueue_fa6_source' ) === 0 ) {
-            wp_enqueue_script( 'fa6', 'https://use.fontawesome.com/releases/v' . GBFA6_VERSION . '/js/all.js', [], GBFA6_VERSION, true );
-        }
-    }
+function getbutterfly_fa_enqueue_local() {
+    // Local stylesheets
+    $fa_external_resources = get_option( 'fa_external_css' );
 
-    if ( (int) get_option( 'fa_enqueue_local_fe' ) === 1 ) {
-        // Local stylesheets
-        $fa_external_resources = get_option( 'fa_external_css' );
+    if ( count( array_unique( array_filter( (array) get_option( 'fa_external_css' ) ) ) ) > 0 ) {
+        $fa_external_resources = array_filter( $fa_external_resources );
 
-        if ( count( array_unique( array_filter( (array) get_option( 'fa_external_css' ) ) ) ) > 0 ) {
-            $fa_external_resources = array_filter( $fa_external_resources );
+        foreach ( $fa_external_resources as $resource_id => $resource ) {
+            $resource = sanitize_url( $resource );
 
-            foreach ( $fa_external_resources as $resource_id => $resource ) {
-                $resource = sanitize_url( $resource );
-
-                wp_enqueue_style( 'fa-external-' . $resource_id, $resource, [], GBFA_PLUGIN_VERSION );
-            }
+            wp_enqueue_style( 'fa-external-' . $resource_id, $resource, [], GBFA_PLUGIN_VERSION );
         }
     }
 }
@@ -98,21 +97,28 @@ function getbutterfly_fa6_enqueue() {
  * Font Awesome 7
  */
 function getbutterfly_fa7_enqueue() {
-    if ( (int) get_option( 'fa_enqueue_fa7_source' ) === 1 ) {
+    $fa_enqueue_fa_source = (int) get_option( 'fa_enqueue_fa_source', 0 );
+
+    if ( $fa_enqueue_fa_source === 1 ) {
         wp_enqueue_script( 'fa7', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/' . GBFA7_VERSION . '/js/all.min.js', [], GBFA7_VERSION, true );
-    } elseif ( (int) get_option( 'fa_enqueue_fa7_source' ) === 0 ) {
+    } elseif ( $fa_enqueue_fa_source === 0 ) {
         wp_enqueue_script( 'fa7', 'https://use.fontawesome.com/releases/v' . GBFA7_VERSION . '/js/all.js', [], GBFA7_VERSION, true );
     }
 }
 
 
 
-if (
-    (int) get_option( 'fa_enqueue_fa6_fe' ) === 1 ||
-    (int) get_option( 'fa_enqueue_local_fe' ) === 1 ||
-    ( (string) get_option( 'fa_enqueue_kit' ) !== '' && (int) get_option( 'fa_enqueue_kit_fe' ) === 1 )
-) {
-    add_action( 'wp_enqueue_scripts', 'getbutterfly_fa6_enqueue' );
+/**
+ * Font Awesome 6
+ */
+function getbutterfly_fa6_enqueue() {
+    $fa_enqueue_fa_source = (int) get_option( 'fa_enqueue_fa_source', 0 );
+
+    if ( $fa_enqueue_fa_source === 1 ) {
+        wp_enqueue_script( 'fa6', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/' . GBFA6_VERSION . '/js/all.min.js', [], GBFA6_VERSION, true );
+    } elseif ( $fa_enqueue_fa_source === 0 ) {
+        wp_enqueue_script( 'fa6', 'https://use.fontawesome.com/releases/v' . GBFA6_VERSION . '/js/all.js', [], GBFA6_VERSION, true );
+    }
 }
 
 
@@ -120,45 +126,37 @@ if (
 /**
  * Register/enqueue plugin scripts and styles (back-end)
  */
-function getbutterfly_fa_enqueue_scripts() {
+function getbutterfly_fa_enqueue_admin_scripts() {
     wp_enqueue_style( 'wpfcs', plugins_url( 'assets/css/admin.css', __FILE__ ), [], GBFA_PLUGIN_VERSION );
 
+    // Font Awesome 7
+    if ( (int) get_option( 'fa_enqueue_fa7_be' ) === 1 ) {
+        getbutterfly_fa7_enqueue();
+    }
+
+    // Font Awesome 6
+    if ( (int) get_option( 'fa_enqueue_fa6_be' ) === 1 ) {
+        getbutterfly_fa6_enqueue();
+    }
+
+    // Font Awesome 5
     if ( (int) get_option( 'fa_enqueue_be' ) === 1 ) {
         wp_enqueue_script( 'fa5', 'https://use.fontawesome.com/releases/v' . GBFA5_VERSION . '/js/all.js', [], GBFA5_VERSION, true );
     }
 
-    if ( (int) get_option( 'fa_enqueue_fa6_be' ) === 1 ) {
-        if ( (int) get_option( 'fa_enqueue_fa6_source' ) === 1 ) {
-            wp_enqueue_script( 'fa6', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/' . GBFA6_VERSION . '/js/all.min.js', [], GBFA6_VERSION, true );
-        } elseif ( (int) get_option( 'fa_enqueue_fa6_source' ) === 0 ) {
-            wp_enqueue_script( 'fa6', 'https://use.fontawesome.com/releases/v' . GBFA6_VERSION . '/js/all.js', [], GBFA6_VERSION, true );
-        }
-    } elseif ( (string) get_option( 'fa_enqueue_kit' ) !== '' && (int) get_option( 'fa_enqueue_kit_be' ) === 1 ) {
-        wp_enqueue_script( 'fa6', get_option( 'fa_enqueue_kit' ), [], GBFA_PLUGIN_VERSION, true );
-        wp_script_add_data( 'fa6', [ 'crossorigin' ], [ 'anonymous' ] );
+    // Font Awesome Kit
+    if ( (string) get_option( 'fa_enqueue_kit' ) !== '' && (int) get_option( 'fa_enqueue_kit_be' ) === 1 ) {
+        wp_enqueue_script( 'fa', get_option( 'fa_enqueue_kit' ), [], GBFA_PLUGIN_VERSION, true );
+        wp_script_add_data( 'fa', [ 'crossorigin' ], [ 'anonymous' ] );
     }
 
+    // Local stylesheets
     if ( (int) get_option( 'fa_enqueue_local_be' ) === 1 ) {
-        // Local stylesheets
-        $fa_external_resources = get_option( 'fa_external_css' );
-
-        if ( count( array_unique( array_filter( (array) get_option( 'fa_external_css' ) ) ) ) > 0 ) {
-            $fa_external_resources = array_filter( $fa_external_resources );
-
-            foreach ( $fa_external_resources as $resource_id => $resource ) {
-                $resource = sanitize_url( $resource );
-
-                wp_enqueue_style( 'fa-external-' . $resource_id, $resource, [], GBFA_PLUGIN_VERSION );
-            }
-        }
-    }
-
-    if ( (int) get_option( 'fa_enqueue_fa7_be' ) === 1 ) {
-        getbutterfly_fa7_enqueue();
+        getbutterfly_fa_enqueue_local();
     }
 }
 
-add_action( 'admin_enqueue_scripts', 'getbutterfly_fa_enqueue_scripts' );
+add_action( 'admin_enqueue_scripts', 'getbutterfly_fa_enqueue_admin_scripts' );
 
 
 
@@ -175,16 +173,16 @@ add_shortcode( 'icon', 'getbutterfly_fa_block_render' );
 register_activation_hook( __FILE__, 'getbutterfly_fa_on_activation' );
 
 function getbutterfly_fa_on_activation() {
+    add_option( 'fa_enqueue_fa_source', '' );
+
     add_option( 'fa_enqueue_fe', 0 );
     add_option( 'fa_enqueue_be', 0 );
 
     add_option( 'fa_enqueue_fa6_fe', 1 );
     add_option( 'fa_enqueue_fa6_be', 1 );
-    add_option( 'fa_enqueue_fa6_source', '' );
 
     add_option( 'fa_enqueue_fa7_fe', 0 );
     add_option( 'fa_enqueue_fa7_be', 0 );
-    add_option( 'fa_enqueue_fa7_source', '' );
 
     add_option( 'fa_enqueue_kit_fe', 0 );
     add_option( 'fa_enqueue_kit_be', 0 );
@@ -195,6 +193,8 @@ function getbutterfly_fa_on_activation() {
     add_option( 'fa_enqueue_kit', '' );
 
     delete_option( 'fa_enqueue_fa6_setup' );
+    delete_option( 'fa_enqueue_fa6_source' );
+    delete_option( 'fa_enqueue_fa7_source' );
 }
 
 
@@ -222,14 +222,14 @@ function getbutterfly_fa_build_admin_page() {
             global $wpdb;
 
             if ( isset( $_POST['save_fa_settings'] ) && wp_verify_nonce( $_POST['save_fa_settings_nonce_field'], 'save_fa_settings_nonce' ) ) {
+                update_option( 'fa_enqueue_fa_source', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa_source'] ?? 0 ) ) );
+
                 update_option( 'fa_enqueue_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fe'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_be'] ?? 0 ) ) );
 
-                update_option( 'fa_enqueue_fa7_source', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa7_source'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_fa7_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa7_fe'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_fa7_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa7_be'] ?? 0 ) ) );
 
-                update_option( 'fa_enqueue_fa6_source', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_source'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_fa6_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_fe'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_fa6_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa6_be'] ?? 0 ) ) );
 
@@ -247,6 +247,8 @@ function getbutterfly_fa_build_admin_page() {
                 update_option( 'fa_enqueue_local_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_local_be'] ?? 0 ) ) );
 
                 delete_option( 'fa_enqueue_fa6_setup' );
+                delete_option( 'fa_enqueue_fa6_source' );
+                delete_option( 'fa_enqueue_fa7_source' );
 
                 echo '<div class="updated notice is-dismissible"><p>Settings updated successfully!</p></div>';
             }
@@ -274,32 +276,28 @@ function getbutterfly_fa_build_admin_page() {
                 <table class="form-table">
                     <tbody>
                         <tr>
-                            <th scope="row"><label>Font Awesome <?php echo esc_attr( GBFA5_VERSION ); ?></label></th>
+                            <th scope="row"><label>Font Awesome Source</label></th>
                             <td>
                                 <p>
-                                    <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fe" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fe' ) ); ?>> Enqueue on front-end
-                                </p>
-                                <p>
-                                    <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_be" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_be' ) ); ?>> Enqueue on back-end
+                                    <label for="fa_enqueue_fa_source">Font Awesome Source</label><br>
+                                    <select name="fa_enqueue_fa_source" id="fa_enqueue_fa_source">
+                                        <option value="1" <?php selected( (int) get_option( 'fa_enqueue_fa_source' ), 1, true ); ?>>CDNJS</option>
+                                        <option value="0" <?php selected( (int) get_option( 'fa_enqueue_fa_source' ), 0, true ); ?>>Font Awesome CDN (recommended)</option>
+                                    </select>
                                 </p>
                             </td>
                         </tr>
+
                         <tr>
                             <th scope="row"></th>
                             <td>
-                                <div class="hr-sect">OR</div>
+                                <div class="hr-sect"></div>
                             </td>
                         </tr>
+
                         <tr>
                             <th scope="row"><label>Font Awesome <?php echo esc_attr( GBFA7_VERSION ); ?></label></th>
                             <td>
-                                <p>
-                                    <label for="fa_enqueue_fa7_source">Font Awesome Source</label><br>
-                                    <select name="fa_enqueue_fa7_source" id="fa_enqueue_fa7_source">
-                                        <option value="1" <?php selected( (int) get_option( 'fa_enqueue_fa7_source' ), 1, true ); ?>>CDNJS</option>
-                                        <option value="0" <?php selected( (int) get_option( 'fa_enqueue_fa7_source' ), 0, true ); ?>>Font Awesome CDN (recommended)</option>
-                                    </select>
-                                </p>
                                 <p>
                                     <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fa7_fe" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fa7_fe' ) ); ?>> Enqueue on front-end
                                 </p>
@@ -318,17 +316,27 @@ function getbutterfly_fa_build_admin_page() {
                             <th scope="row"><label>Font Awesome <?php echo esc_attr( GBFA6_VERSION ); ?></label></th>
                             <td>
                                 <p>
-                                    <label for="fa_enqueue_fa6_source">Font Awesome Source</label><br>
-                                    <select name="fa_enqueue_fa6_source" id="fa_enqueue_fa6_source">
-                                        <option value="1" <?php selected( (int) get_option( 'fa_enqueue_fa6_source' ), 1, true ); ?>>CDNJS</option>
-                                        <option value="0" <?php selected( (int) get_option( 'fa_enqueue_fa6_source' ), 0, true ); ?>>Font Awesome CDN (recommended)</option>
-                                    </select>
-                                </p>
-                                <p>
                                     <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fa6_fe" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fa6_fe' ) ); ?>> Enqueue on front-end
                                 </p>
                                 <p>
                                     <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fa6_be" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fa6_be' ) ); ?>> Enqueue on back-end
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>
+                                <div class="hr-sect">OR</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label>Font Awesome <?php echo esc_attr( GBFA5_VERSION ); ?></label></th>
+                            <td>
+                                <p>
+                                    <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_fe" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_fe' ) ); ?>> Enqueue on front-end
+                                </p>
+                                <p>
+                                    <input type="checkbox" class="wppd-ui-toggle" name="fa_enqueue_be" value="1" <?php checked( 1, (int) get_option( 'fa_enqueue_be' ) ); ?>> Enqueue on back-end
                                 </p>
                             </td>
                         </tr>

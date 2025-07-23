@@ -4,7 +4,7 @@
     "category": "getbutterfly",
     "parent": ["getbutterfly"],
     "icon": "star-filled",
-    "description": "Display a Font Awesome 5, Font Awesome 6 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.",
+    "description": "Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.",
     "keywords": ["font", "icon", "pictogram", "fontawesome", "fa"],
     "textDomain": "block-for-font-awesome"
 }
