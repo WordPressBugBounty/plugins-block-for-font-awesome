@@ -3,7 +3,7 @@
  * Plugin Name: Block for Font Awesome
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
  * Description: Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.7.1
+ * Version: 1.7.2
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
@@ -32,7 +32,7 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.7.1' );
+define( 'GBFA_PLUGIN_VERSION', '1.7.2' );
 define( 'GBFA5_VERSION', '5.15.4' );
 define( 'GBFA6_VERSION', '6.7.2' );
 define( 'GBFA7_VERSION', '7.0.0' );
@@ -257,7 +257,7 @@ function getbutterfly_fa_build_admin_page() {
             <h2><span class="dashicons dashicons-superhero"></span> Dashboard</h2>
 
             <div class="gb-ad" id="gb-ad">
-                <h3 class="gb-ad--header"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 68"><defs/><rect width="100%" height="100%" fill="none"/><g class="currentLayer"><path fill="#fff" d="M34.76 33C22.85 21.1 20.1 13.33 28.23 5.2 36.37-2.95 46.74.01 50.53 3.8c3.8 3.8 5.14 17.94-5.04 28.12-2.95 2.95-5.97 5.84-5.97 5.84L34.76 33"/><path fill="#fff" d="M43.98 42.21c5.54 5.55 14.59 11.06 20.35 5.3 5.76-5.77 3.67-13.1.98-15.79-2.68-2.68-10.87-5.25-18.07 1.96-2.95 2.95-5.96 5.84-5.96 5.84l2.7 2.7m-1.76 1.75c5.55 5.54 11.06 14.59 5.3 20.35-5.77 5.76-13.1 3.67-15.79.98-2.69-2.68-5.25-10.87 1.95-18.07 2.85-2.84 5.84-5.96 5.84-5.96l2.7 2.7" class="selected"/><path fill="#fff" d="M33 34.75c-11.9-11.9-19.67-14.67-27.8-6.52-8.15 8.14-5.2 18.5-1.4 22.3 3.8 3.79 17.95 5.13 28.13-5.05 3.1-3.11 5.84-5.97 5.84-5.97L33 34.75"/></g></svg> Thank you for using Block for Font Awesome!</h3>
+                <h3 class="gb-ad--header"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 68"><defs/><rect width="100%" height="100%" fill="none"/><g class="currentLayer"><path fill="#000000" d="M34.76 33C22.85 21.1 20.1 13.33 28.23 5.2 36.37-2.95 46.74.01 50.53 3.8c3.8 3.8 5.14 17.94-5.04 28.12-2.95 2.95-5.97 5.84-5.97 5.84L34.76 33"/><path fill="#000000" d="M43.98 42.21c5.54 5.55 14.59 11.06 20.35 5.3 5.76-5.77 3.67-13.1.98-15.79-2.68-2.68-10.87-5.25-18.07 1.96-2.95 2.95-5.96 5.84-5.96 5.84l2.7 2.7m-1.76 1.75c5.55 5.54 11.06 14.59 5.3 20.35-5.77 5.76-13.1 3.67-15.79.98-2.69-2.68-5.25-10.87 1.95-18.07 2.85-2.84 5.84-5.96 5.84-5.96l2.7 2.7" class="selected"/><path fill="#000000" d="M33 34.75c-11.9-11.9-19.67-14.67-27.8-6.52-8.15 8.14-5.2 18.5-1.4 22.3 3.8 3.79 17.95 5.13 28.13-5.05 3.1-3.11 5.84-5.97 5.84-5.97L33 34.75"/></g></svg> Thank you for using Block for Font Awesome!</h3>
                 <div class="gb-ad--content">
                     <p>If you enjoy this plugin, do not forget to <a href="https://wordpress.org/support/plugin/block-for-font-awesome/reviews/?filter=5" rel="external">rate it</a>! We work hard to update it, fix bugs, add new features and make it compatible with the latest web technologies.</p>
                     <p>Have you tried our other <a href="https://getbutterfly.com/wordpress-plugins/">WordPress plugins</a>?</p>
@@ -267,7 +267,7 @@ function getbutterfly_fa_build_admin_page() {
                 </div>
             </div>
 
-            <p>Use Font Awesome 5 <strong>or</strong> Font Awesome 6 <strong>or</strong> Font Awesome 7 <strong>or</strong> a custom kit. Do not use all of them, as the kit will overwrite all other options and Font Awesome 6 will overwrite Font Awesome 5 and you will run into performance issues.</p>
+            <p>Use Font Awesome 5 <strong>or</strong> Font Awesome 6 <strong>or</strong> Font Awesome 7 <strong>or</strong> a custom kit. Do not use all of them, as the kit will overwrite all other options, and Font Awesome 7 will overwrite all the other lower versions, and you will run into performance issues.</p>
             <p>Note that you can have different versions in front-end and back-end.</p>
 
             <form method="post">

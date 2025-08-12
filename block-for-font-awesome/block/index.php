@@ -54,18 +54,51 @@ function getbutterfly_fa_block_enqueue() {
 /**
  * Render icon on both frontend and backend
  *
- * @param  array $atts Array of class attributes
- * @return string      Icon element
+ * Supports:
+ * - [fa class="fas fa-phone"] (classic)
+ * - [icon name="phone-volume" prefix="fas"] → class="fas-phone-volume" (requested behavior)
+ *
+ * @param  array  $atts    Shortcode attributes
+ * @param  string $content Shortcode content (unused)
+ * @param  string $tag     Shortcode tag name ('fa' or 'icon')
+ * @return string          Icon element
  */
-function getbutterfly_fa_block_render( $atts ) {
+function getbutterfly_fa_block_render( $atts, $content = '', $tag = '' ) {
+    // Accept both classic and icon-style attributes
     $attributes = shortcode_atts(
         [
-            'class' => '',
+            'class'  => '',
+            'name'   => '', // for [icon]
+            'prefix' => '', // for [icon]
         ],
-        $atts
+        $atts,
+        $tag
     );
 
-    $class = esc_attr( $attributes['class'] );
+    // Initialize to avoid notices and allow fallbacks
+    $class = '';
+
+    if ( $tag === 'icon' ) {
+        // Build class as prefix-dash-name when using [icon]
+        $prefix = sanitize_html_class( trim( (string) $attributes['prefix'] ) );
+        $name   = sanitize_html_class( trim( (string) $attributes['name'] ) );
+
+        // If prefix is fas, then changed it to fa and add fa-solid
+        $prefix = ( $prefix === 'fas' ) ? 'fa-solid fa' : $prefix;
+
+        if ( $prefix !== '' && $name !== '' ) {
+            // Single class per requirement (e.g., "fas-phone-volume")
+            $class = $prefix . '-' . $name;
+        }
+
+        // If class is still empty and a plain class was provided, fallback to it
+        if ( $class === '' && $attributes['class'] !== '' ) {
+            $class = esc_attr( $attributes['class'] );
+        }
+    } else {
+        // Default/legacy behavior for [fa] and others
+        $class = esc_attr( $attributes['class'] );
+    }
 
     return '<i class="' . $class . '"></i>';
 }

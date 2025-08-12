@@ -30,7 +30,7 @@
         attributes: {
             faClass: {
                 type: 'string',
-                default: 'fa-solid fa-wand-magic-sparkles',
+                default: '',
             },
             faColor: {
                 type: 'string',
@@ -81,7 +81,7 @@
                         initialOpen: true,
                     },
                         el(TextControl, {
-                            type: 'string',
+                            type: 'text',
                             label: i18n.__('Icon class'),
                             placeholder: i18n.__('fa-solid fa-wand-magic-sparkles'),
                             help: i18n.__('Font Awesome class, including fixed width or animations. Custom classes are also allowed.'),
@@ -101,7 +101,6 @@
                             },
                         }),
                         el(ToggleControl, {
-                            type: 'boolean',
                             label: i18n.__('Fixed width (add the fa-fw class)'),
                             checked: !!fixedWidth,
                             onChange: function (new_fixedWidth) {
@@ -109,7 +108,6 @@
                             },
                         }),
                         el(ToggleControl, {
-                            type: 'boolean',
                             label: i18n.__('Open link in new tab'),
                             checked: !!newTab,
                             onChange: function (new_newTab) {
@@ -117,7 +115,6 @@
                             },
                         }),
                         el(SelectControl, {
-                            type: 'string',
                             label: i18n.__('Icon alignment'),
                             value: faAlign,
                             options: [
@@ -130,7 +127,6 @@
                             },
                         }),
                         el(SelectControl, {
-                            type: 'string',
                             label: i18n.__('Icon Size'),
                             value: faSize,
                             options: [

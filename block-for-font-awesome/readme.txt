@@ -4,7 +4,7 @@ Tags: font awesome, font, icon, pictogram, fa
 Requires at least: 6.4
 Tested up to: 6.8.2
 Requires PHP: 7.1
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -29,8 +29,13 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 1. Front-end icon blocks
 2. Back-end icon blocks
 3. Icon settings
+4. Plugin settings
 
 == Changelog ==
+
+= 1.7.2 =
+* FIX: Fix block control types for latest block editor versions
+* FEATURE: Add better support for "icon" shortcodes
 
 = 1.7.1 =
 * FEATURE: Refactor resource loading and CDN source

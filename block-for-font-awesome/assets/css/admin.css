@@ -2,31 +2,24 @@
  * Ad Box UI
  */
 .gb-ad {
-    color: #ffffff;
     background-color: #1d2327;
     border-radius: 2px;
     box-shadow: 0 2px 0 rgb(44 44 84 / 25%);
     margin: 16px 0;
+    padding: 24px;
 }
 .gb-ad svg {
     height: 24px;
     vertical-align: text-bottom;
 }
 .gb-ad h3.gb-ad--header {
-    color: #ffffff;
     font-size: 1.75em;
     font-weight: 300;
     line-height: 1.75;
     margin: 8px 0;
-    padding: 16px 24px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
-.gb-ad .gb-ad--content {
-    padding: 16px 24px;
-}
 .gb-ad .gb-ad--footer {
-    color: #ffffff;
-    padding: 16px 24px;
     border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
