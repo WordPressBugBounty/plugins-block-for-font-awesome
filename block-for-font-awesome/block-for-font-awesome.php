@@ -3,7 +3,7 @@
  * Plugin Name: Block for Font Awesome
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
  * Description: Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.7.2
+ * Version: 1.7.3
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
@@ -32,10 +32,10 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.7.2' );
+define( 'GBFA_PLUGIN_VERSION', '1.7.3' );
 define( 'GBFA5_VERSION', '5.15.4' );
 define( 'GBFA6_VERSION', '6.7.2' );
-define( 'GBFA7_VERSION', '7.0.0' );
+define( 'GBFA7_VERSION', '7.0.1' );
 
 require_once 'block/index.php';
 

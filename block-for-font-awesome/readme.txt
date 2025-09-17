@@ -33,6 +33,9 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 
 == Changelog ==
 
+= 1.7.3 =
+* UPDATE: Update Font Awesome 7 to 7.0.1 (from 7.0.0)
+
 = 1.7.2 =
 * FIX: Fix block control types for latest block editor versions
 * FEATURE: Add better support for "icon" shortcodes
