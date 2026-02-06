@@ -1,20 +1,22 @@
 /**
  * Register editor block
  */
-(function (blocks, editor, components, i18n, element) {
+(function (blocks, blockEditor, components, i18n, element) {
     var el = element.createElement;
     var registerBlockType = wp.blocks.registerBlockType;
-    var useBlockProps = wp.blockEditor.useBlockProps;
-    var InspectorControls = wp.blockEditor.InspectorControls;
+    var useBlockProps = blockEditor.useBlockProps;
+    var InspectorControls = blockEditor.InspectorControls;
 
-    var TextControl = wp.components.TextControl;
-    var SelectControl = wp.components.SelectControl;
+    var TextControl = components.TextControl;
+    var SelectControl = components.SelectControl;
     var ServerSideRender = wp.serverSideRender;
-    var ToggleControl = wp.components.ToggleControl;
-    var PanelBody = wp.components.PanelBody;
-    var ColorPalette = wp.components.ColorPalette;
+    var ToggleControl = components.ToggleControl;
+    var PanelBody = components.PanelBody;
+    var ColorPalette = components.ColorPalette;
+    var Fragment = element.Fragment;
 
     registerBlockType('getbutterfly/font-awesome', {
+        apiVersion: 3,
         title: 'Font Awesome Icon',
         description: 'A single Font Awesome icon block.',
         icon: 'star-filled',
@@ -72,7 +74,7 @@
             // Get block props
             var blockProps = useBlockProps();
 
-            return [
+            return el(Fragment, {},
                 el(InspectorControls, { key: 'inspector' },
                     el(
                         PanelBody, {
@@ -163,7 +165,7 @@
                         attributes: props.attributes
                     })
                 )
-            ];
+            );
         },
 
         save: function () {
@@ -172,7 +174,7 @@
     });
 })(
     window.wp.blocks,
-    window.wp.editor,
+    window.wp.blockEditor,
     window.wp.components,
     window.wp.i18n,
     window.wp.element,

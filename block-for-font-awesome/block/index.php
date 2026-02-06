@@ -41,8 +41,9 @@ function getbutterfly_fa_block_enqueue() {
             'wp-blocks',
             'wp-element',
             'wp-i18n',
-            'wp-editor',
+            'wp-block-editor',
             'wp-components',
+            'wp-server-side-render',
         ],
         GBFA_PLUGIN_VERSION,
         true
@@ -142,6 +143,7 @@ function getbutterfly_fa_block_init() {
     register_block_type(
         'getbutterfly/font-awesome',
         [
+            'apiVersion'     => 3,
             'render_callback' => 'getbutterfly_fa_render',
             'attributes'      => [
                 'faClass'    => [

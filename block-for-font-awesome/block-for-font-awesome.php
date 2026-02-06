@@ -3,27 +3,61 @@
  * Plugin Name: Block for Font Awesome
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
  * Description: Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.7.3
+ * Version: 1.7.6
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
-
+ *
  * Font Awesome Free (c) (https://fontawesome.com/license)
-
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Rationale for using CDNs to load Font Awesome assets:
+ *
+ * Using the official Font Awesome CDNs is a pragmatic choice for performance,
+ * reliability, and maintainability. These networks provide globally distributed,
+ * versioned assets that are aggressively cached, which reduces load times,
+ * bandwidth, and duplicate payloads across sites. Because many users already
+ * have Font Awesome cached from other properties, loading via a CDN often results
+ * in a cache hit, further improving real-world performance.
+ *
+ * From a maintenance and security standpoint, sourcing the exact, immutable
+ * version (e.g., v6.x or v7.x) from well-known providers like the Font Awesome CDN
+ * or cdnjs ensures we are serving the intended artifact without bundling megabytes
+ * of assets into the plugin. This lowers the plugin footprint, simplifies updates,
+ * and reduces the risk of shipping outdated files. The plugin only references
+ * pinned versions and adds crossorigin="anonymous" to minimize referrer leakage
+ * and keep requests as privacy-friendly as possible.
+ *
+ * Equally important, the plugin gives site owners control. Admins can choose
+ * their preferred source (Font Awesome CDN or cdnjs), disable enqueuing entirely
+ * if the theme already provides Font Awesome, or use the “Local Stylesheets”
+ * option to serve assets from their own infrastructure. This flexibility lets
+ * site owners comply with organizational policies or hosting constraints without
+ * losing functionality.
+ *
+ * Finally, the assets involved are static font/icon resources and do not process
+ * user data. The plugin does not transmit personally identifiable information and
+ * does not add any tracking logic. In short, loading Font Awesome from a trusted
+ * CDN is a widely adopted, performance-oriented pattern that keeps the plugin lean
+ * while still offering a fully local alternative for environments that require it.
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 if ( ! function_exists( 'add_filter' ) ) {
     header( 'Status: 403 Forbidden' );
@@ -32,10 +66,10 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.7.3' );
+define( 'GBFA_PLUGIN_VERSION', '1.7.6' );
 define( 'GBFA5_VERSION', '5.15.4' );
 define( 'GBFA6_VERSION', '6.7.2' );
-define( 'GBFA7_VERSION', '7.0.1' );
+define( 'GBFA7_VERSION', '7.1.0' );
 
 require_once 'block/index.php';
 
@@ -221,7 +255,7 @@ function getbutterfly_fa_build_admin_page() {
         if ( $tab === 'dashboard' ) {
             global $wpdb;
 
-            if ( isset( $_POST['save_fa_settings'] ) && wp_verify_nonce( $_POST['save_fa_settings_nonce_field'], 'save_fa_settings_nonce' ) ) {
+            if ( isset( $_POST['save_fa_settings'], $_POST['save_fa_settings_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['save_fa_settings_nonce_field'] ) ), 'save_fa_settings_nonce' ) ) {
                 update_option( 'fa_enqueue_fa_source', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fa_source'] ?? 0 ) ) );
 
                 update_option( 'fa_enqueue_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_fe'] ?? 0 ) ) );
@@ -259,7 +293,7 @@ function getbutterfly_fa_build_admin_page() {
             <div class="gb-ad" id="gb-ad">
                 <h3 class="gb-ad--header"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 68"><defs/><rect width="100%" height="100%" fill="none"/><g class="currentLayer"><path fill="#000000" d="M34.76 33C22.85 21.1 20.1 13.33 28.23 5.2 36.37-2.95 46.74.01 50.53 3.8c3.8 3.8 5.14 17.94-5.04 28.12-2.95 2.95-5.97 5.84-5.97 5.84L34.76 33"/><path fill="#000000" d="M43.98 42.21c5.54 5.55 14.59 11.06 20.35 5.3 5.76-5.77 3.67-13.1.98-15.79-2.68-2.68-10.87-5.25-18.07 1.96-2.95 2.95-5.96 5.84-5.96 5.84l2.7 2.7m-1.76 1.75c5.55 5.54 11.06 14.59 5.3 20.35-5.77 5.76-13.1 3.67-15.79.98-2.69-2.68-5.25-10.87 1.95-18.07 2.85-2.84 5.84-5.96 5.84-5.96l2.7 2.7" class="selected"/><path fill="#000000" d="M33 34.75c-11.9-11.9-19.67-14.67-27.8-6.52-8.15 8.14-5.2 18.5-1.4 22.3 3.8 3.79 17.95 5.13 28.13-5.05 3.1-3.11 5.84-5.97 5.84-5.97L33 34.75"/></g></svg> Thank you for using Block for Font Awesome!</h3>
                 <div class="gb-ad--content">
-                    <p>If you enjoy this plugin, do not forget to <a href="https://wordpress.org/support/plugin/block-for-font-awesome/reviews/?filter=5" rel="external">rate it</a>! We work hard to update it, fix bugs, add new features and make it compatible with the latest web technologies.</p>
+                    <p>If you enjoy this plugin, do not forget to <a href="https://wordpress.org/support/plugin/block-for-font-awesome/reviews/" rel="external">rate it</a>! We work hard to update it, fix bugs, add new features and make it compatible with the latest web technologies.</p>
                     <p>Have you tried our other <a href="https://getbutterfly.com/wordpress-plugins/">WordPress plugins</a>?</p>
                 </div>
                 <div class="gb-ad--footer">

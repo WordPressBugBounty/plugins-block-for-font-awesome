@@ -2,9 +2,9 @@
 Contributors: butterflymedia
 Tags: font awesome, font, icon, pictogram, fa
 Requires at least: 6.4
-Tested up to: 6.8.2
+Tested up to: 6.9
 Requires PHP: 7.1
-Stable tag: 1.7.2
+Stable tag: 1.7.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,18 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 4. Plugin settings
 
 == Changelog ==
+
+= 1.7.6 =
+* SECURITY: Add direct file access protection
+* FIX: Fix WPCS nonce validation warnings
+* FIX: Remove five-star review filter from plugin review link
+
+= 1.7.5 =
+* UPDATE: Upgrade block to API version 3 for iframe editor compatibility
+
+= 1.7.4 =
+* UPDATE: Update Font Awesome 7 to 7.1.0 (from 7.0.1)
+* UPDATE: Update WordPress compatibility
 
 = 1.7.3 =
 * UPDATE: Update Font Awesome 7 to 7.0.1 (from 7.0.0)
