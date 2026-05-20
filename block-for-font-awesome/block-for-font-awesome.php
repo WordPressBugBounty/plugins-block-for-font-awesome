@@ -3,7 +3,7 @@
  * Plugin Name: Block for Font Awesome
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
  * Description: Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.7.7
+ * Version: 1.7.8
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
@@ -35,14 +35,14 @@
  *
  * From a maintenance and security standpoint, sourcing the exact, immutable
  * version (e.g., v6.x or v7.x) from well-known providers like the Font Awesome CDN
- * or cdnjs ensures we are serving the intended artifact without bundling megabytes
+ * or jsDelivr ensures we are serving the intended artifact without bundling megabytes
  * of assets into the plugin. This lowers the plugin footprint, simplifies updates,
  * and reduces the risk of shipping outdated files. The plugin only references
  * pinned versions and adds crossorigin="anonymous" to minimize referrer leakage
  * and keep requests as privacy-friendly as possible.
  *
  * Equally important, the plugin gives site owners control. Admins can choose
- * their preferred source (Font Awesome CDN or cdnjs), disable enqueuing entirely
+ * their preferred source (Font Awesome CDN or jsDelivr), disable enqueuing entirely
  * if the theme already provides Font Awesome, or use the “Local Stylesheets”
  * option to serve assets from their own infrastructure. This flexibility lets
  * site owners comply with organizational policies or hosting constraints without
@@ -66,7 +66,7 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.7.7' );
+define( 'GBFA_PLUGIN_VERSION', '1.7.8' );
 define( 'GBFA5_VERSION', '5.15.4' );
 define( 'GBFA6_VERSION', '6.7.2' );
 define( 'GBFA7_VERSION', '7.2.0' );
@@ -134,7 +134,7 @@ function getbutterfly_fa7_enqueue() {
     $fa_enqueue_fa_source = (int) get_option( 'fa_enqueue_fa_source', 0 );
 
     if ( $fa_enqueue_fa_source === 1 ) {
-        wp_enqueue_script( 'fa7', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/' . GBFA7_VERSION . '/js/all.min.js', [], GBFA7_VERSION, true );
+        wp_enqueue_script( 'fa7', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@' . GBFA7_VERSION . '/js/all.min.js', [], GBFA7_VERSION, true );
     } elseif ( $fa_enqueue_fa_source === 0 ) {
         wp_enqueue_script( 'fa7', 'https://use.fontawesome.com/releases/v' . GBFA7_VERSION . '/js/all.js', [], GBFA7_VERSION, true );
     }
@@ -149,7 +149,7 @@ function getbutterfly_fa6_enqueue() {
     $fa_enqueue_fa_source = (int) get_option( 'fa_enqueue_fa_source', 0 );
 
     if ( $fa_enqueue_fa_source === 1 ) {
-        wp_enqueue_script( 'fa6', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/' . GBFA6_VERSION . '/js/all.min.js', [], GBFA6_VERSION, true );
+        wp_enqueue_script( 'fa6', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@' . GBFA6_VERSION . '/js/all.min.js', [], GBFA6_VERSION, true );
     } elseif ( $fa_enqueue_fa_source === 0 ) {
         wp_enqueue_script( 'fa6', 'https://use.fontawesome.com/releases/v' . GBFA6_VERSION . '/js/all.js', [], GBFA6_VERSION, true );
     }
@@ -315,7 +315,7 @@ function getbutterfly_fa_build_admin_page() {
                                 <p>
                                     <label for="fa_enqueue_fa_source">Font Awesome Source</label><br>
                                     <select name="fa_enqueue_fa_source" id="fa_enqueue_fa_source">
-                                        <option value="1" <?php selected( (int) get_option( 'fa_enqueue_fa_source' ), 1, true ); ?>>CDNJS</option>
+                                        <option value="1" <?php selected( (int) get_option( 'fa_enqueue_fa_source' ), 1, true ); ?>>jsDelivr</option>
                                         <option value="0" <?php selected( (int) get_option( 'fa_enqueue_fa_source' ), 0, true ); ?>>Font Awesome CDN (recommended)</option>
                                     </select>
                                 </p>
