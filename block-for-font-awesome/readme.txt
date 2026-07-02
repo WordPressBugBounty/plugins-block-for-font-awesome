@@ -4,7 +4,7 @@ Tags: font awesome, font, icon, pictogram, fa
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.1
-Stable tag: 1.7.8
+Stable tag: 1.7.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -33,9 +33,11 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 
 == Changelog ==
 
+= 1.7.9 =
+* UPDATE: Update Font Awesome 7 to 7.3.0 (from 7.2.0)
+
 = 1.7.8 =
 * UPDATE: Tested up to WordPress 7.0
-
 
 = 1.7.7 =
 * UPDATE: Update Font Awesome 7 to 7.2.0 (from 7.1.0)
