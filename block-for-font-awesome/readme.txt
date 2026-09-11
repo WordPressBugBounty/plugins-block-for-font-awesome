@@ -1,10 +1,11 @@
 === Block for Font Awesome ===
 Contributors: butterflymedia
+Donate link: https://buymeacoffee.com/wolffe
 Tags: font awesome, font, icon, pictogram, fa
 Requires at least: 6.4
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.1
-Stable tag: 1.7.9
+Stable tag: 1.7.10
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -17,6 +18,8 @@ This plugin allows you to display any Font Awesome 5, Font Awesome 6, Font Aweso
 You can also add the icon as HTML code or, inline, by using the `[fa class="fas fa-fw fa-phone"]` shortcode.
 
 Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/) here.
+
+Explore more [WordPress Plugins](https://getbutterfly.com/wordpress-plugins/).
 
 == Installation ==
 
@@ -33,8 +36,15 @@ Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wor
 
 == Changelog ==
 
+= 1.7.10 =
+* UPDATE: Update Font Awesome 7 to 7.3.1 and declare Block API version 3 metadata
+* UPDATE: Tested up to WordPress 7.1
+* DOCS: Add WordPress Plugins directory and donation link
+
 = 1.7.9 =
-* UPDATE: Update Font Awesome 7 to 7.3.0 (from 7.2.0)
+* UPDATE: Update Font Awesome 7 to 7.3.1 (from 7.3.0)
+* UPDATE: Tested up to WordPress 7.1
+* DOCS: Add WordPress Plugins directory and donation link
 
 = 1.7.8 =
 * UPDATE: Tested up to WordPress 7.0
