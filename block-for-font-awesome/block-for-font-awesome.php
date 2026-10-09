@@ -1,15 +1,18 @@
 <?php
 /**
- * Plugin Name: Block for Font Awesome
+ * Plugin Name: Block for Font Awesome Icons – Searchable Icon Picker, SVG, FA 7
  * Plugin URI: https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/
- * Description: Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
- * Version: 1.7.10
+ * Description: Pick Font Awesome icons from a searchable list and output them as lightweight inline SVG. Also adds Font Awesome Free to the core Icon block.
+ * Version: 1.8.0
+ * Requires at least: 7.1
+ * Requires PHP: 8.0
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain: block-for-font-awesome
  *
- * Font Awesome Free (c) (https://fontawesome.com/license)
+ * Font Awesome Free icons (c) Fonticons, Inc., CC BY 4.0 (https://fontawesome.com/license/free)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +69,7 @@ if ( ! function_exists( 'add_filter' ) ) {
     exit();
 }
 
-define( 'GBFA_PLUGIN_VERSION', '1.7.10' );
+define( 'GBFA_PLUGIN_VERSION', '1.8.0' );
 define( 'GBFA5_VERSION', '5.15.4' );
 define( 'GBFA6_VERSION', '6.7.2' );
 define( 'GBFA7_VERSION', '7.3.1' );
@@ -197,7 +200,6 @@ add_action( 'admin_enqueue_scripts', 'getbutterfly_fa_enqueue_admin_scripts' );
 add_action( 'init', 'getbutterfly_fa_block_init' );
 
 add_filter( 'block_categories_all', 'getbutterfly_block_categories', 10, 2 );
-add_action( 'enqueue_block_editor_assets', 'getbutterfly_fa_block_enqueue' );
 
 add_shortcode( 'fa', 'getbutterfly_fa_block_render' );
 add_shortcode( 'icon', 'getbutterfly_fa_block_render' );
@@ -212,8 +214,11 @@ function getbutterfly_fa_on_activation() {
     add_option( 'fa_enqueue_fe', 0 );
     add_option( 'fa_enqueue_be', 0 );
 
-    add_option( 'fa_enqueue_fa6_fe', 1 );
-    add_option( 'fa_enqueue_fa6_be', 1 );
+    // Free icons render as inline SVG, so new installs don't load any Font Awesome script.
+    add_option( 'fa_enqueue_fa6_fe', 0 );
+    add_option( 'fa_enqueue_fa6_be', 0 );
+
+    add_option( 'fa_core_icons', 1 );
 
     add_option( 'fa_enqueue_fa7_fe', 0 );
     add_option( 'fa_enqueue_fa7_be', 0 );
@@ -280,6 +285,8 @@ function getbutterfly_fa_build_admin_page() {
                 update_option( 'fa_enqueue_local_fe', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_local_fe'] ?? 0 ) ) );
                 update_option( 'fa_enqueue_local_be', (int) sanitize_text_field( wp_unslash( $_POST['fa_enqueue_local_be'] ?? 0 ) ) );
 
+                update_option( 'fa_core_icons', (int) sanitize_text_field( wp_unslash( $_POST['fa_core_icons'] ?? 0 ) ) );
+
                 delete_option( 'fa_enqueue_fa6_setup' );
                 delete_option( 'fa_enqueue_fa6_source' );
                 delete_option( 'fa_enqueue_fa7_source' );
@@ -301,6 +308,7 @@ function getbutterfly_fa_build_admin_page() {
                 </div>
             </div>
 
+            <p><strong>Font Awesome Free icons no longer need any script or stylesheet.</strong> The block, the <code>[fa]</code> and <code>[icon]</code> shortcodes output them as inline SVG. Only enable a source below if you use Font Awesome Pro, a kit, or <code>&lt;i class="fa-..."&gt;</code> markup elsewhere in your theme.</p>
             <p>Use Font Awesome 5 <strong>or</strong> Font Awesome 6 <strong>or</strong> Font Awesome 7 <strong>or</strong> a custom kit. Do not use all of them, as the kit will overwrite all other options, and Font Awesome 7 will overwrite all the other lower versions, and you will run into performance issues.</p>
             <p>Note that you can have different versions in front-end and back-end.</p>
 
@@ -309,6 +317,16 @@ function getbutterfly_fa_build_admin_page() {
 
                 <table class="form-table">
                     <tbody>
+                        <tr>
+                            <th scope="row"><label for="fa_core_icons">Core Icon block</label></th>
+                            <td>
+                                <p>
+                                    <input type="checkbox" class="wppd-ui-toggle" name="fa_core_icons" id="fa_core_icons" value="1" <?php checked( 1, (int) get_option( 'fa_core_icons', 1 ) ); ?>> Add Font Awesome Free to the WordPress Icon block
+                                    <br><small>Adds a "Font Awesome Free" tab with 2,000+ icons to the icon picker of the core Icon block.</small>
+                                </p>
+                            </td>
+                        </tr>
+
                         <tr>
                             <th scope="row"><label>Font Awesome Source</label></th>
                             <td>
@@ -479,8 +497,9 @@ function getbutterfly_fa_build_admin_page() {
         <?php } elseif ( $tab === 'help' ) { ?>
             <h2><span class="dashicons dashicons-editor-help"></span> Help</h2>
 
-            <p>This plugin allows you to display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.</p>
-            <p>You can also display inline icons by using the <code>[fa class="fas fa-fw fa-3x fa-phone"]</code> shortcode.</p>
+            <p>Add a <strong>Font Awesome Icon</strong> block, click <em>Choose icon</em> and search by name or keyword. No class names needed.</p>
+            <p>You can also display inline icons with the <code>[fa class="fa-solid fa-phone"]</code> or <code>[icon prefix="fas" name="phone"]</code> shortcodes. Add <code>label="Call us"</code> for icons that carry meaning.</p>
+            <p>Font Awesome Free icons by <a href="https://fontawesome.com/" rel="external">Fonticons, Inc.</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="external">CC BY 4.0</a>.</p>
 
             <p><a href="https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/" class="button button-primary">Documentation</a></p>
 

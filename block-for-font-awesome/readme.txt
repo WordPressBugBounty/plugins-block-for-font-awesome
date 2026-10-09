@@ -1,40 +1,94 @@
-=== Block for Font Awesome ===
+=== Block for Font Awesome Icons – Searchable Icon Picker, SVG, FA 7 ===
 Contributors: butterflymedia
 Donate link: https://buymeacoffee.com/wolffe
-Tags: font awesome, font, icon, pictogram, fa
-Requires at least: 6.4
-Tested up to: 7.1
-Requires PHP: 7.1
-Stable tag: 1.7.10
+Tags: font awesome, icon, svg, icon block, fontawesome
+Requires at least: 7.1
+Tested up to: 7.1.3
+Requires PHP: 8.0
+Stable tag: 1.8.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Display a Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon in a Gutenberg block or a custom HTML block.
+For anyone who wants Font Awesome icons in the block editor without class names or a heavy icon font: search, click, done. Free icons render as SVG.
 
 == Description ==
 
-This plugin allows you to display any Font Awesome 5, Font Awesome 6, Font Awesome 7 or Font Awesome kit icon as an editor block (Gutenberg) or a custom HTML block.
+Add a **Font Awesome Icon** block, click **Choose icon**, search by name or keyword ("phone", "home", "arrow") and pick from 2,000+ Font Awesome Free 7 icons. No class names to remember.
 
-You can also add the icon as HTML code or, inline, by using the `[fa class="fas fa-fw fa-phone"]` shortcode.
+Free icons are output as small inline SVG, so your pages don't need to load the Font Awesome script or font at all. Icons follow your text colour and work with the block Color, Typography (size) and Spacing panels.
+
+* Visual, searchable icon picker with style filter (solid, regular, brands) and keyboard navigation.
+* Inline SVG output: no `all.js`, no web font, no layout shift.
+* Accessible: decorative icons are hidden from screen readers, or add a label for icons that carry meaning.
+* Optional link, new tab, size, fixed width and alignment.
+* Adds Font Awesome Free as a collection in the core WordPress **Icon** block, with transforms between the two blocks.
+* Two patterns: an icon feature list and a social icons row.
+* Existing content keeps working: old blocks and the `[fa class="fa-solid fa-phone"]` and `[icon prefix="fas" name="phone"]` shortcodes now render Free icons as SVG too.
+* Font Awesome Pro and kits are still supported through the optional script loader in Settings → Font Awesome.
 
 Read more about the [Block for Font Awesome plugin](https://getbutterfly.com/wordpress-plugins/block-for-font-awesome/) here.
 
 Explore more [WordPress Plugins](https://getbutterfly.com/wordpress-plugins/).
 
+Font Awesome Free icons by [Fonticons, Inc.](https://fontawesome.com/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Font Awesome is a trademark of Fonticons, Inc. This plugin is not affiliated with or endorsed by Fonticons, Inc.
+
+### From the same author
+
+* [Active Contacts - WordPress CRM & Follow-up Plugin](https://getbutterfly.com/wordpress-plugins/active-contacts/)
+* [LazyClone - Copy a WordPress Site Without FTP](https://getbutterfly.com/wordpress-plugins/lazyclone/)
+* [Lighthouse - WordPress Performance & Speed Optimization Plugin](https://getbutterfly.com/wordpress-plugins/lighthouse/)
+* [Active Analytics - Privacy-Friendly WordPress Analytics Plugin](https://getbutterfly.com/wordpress-plugins/active-analytics/)
+* [ImagePress - WordPress Image Gallery & Community Photo Plugin](https://getbutterfly.com/wordpress-plugins/imagepress/)
+* [eCards - WordPress eCard Plugin with Email Designer](https://getbutterfly.com/wordpress-plugins/wordpress-ecards-plugin/)
+* [Repeater for Gravity Forms - Repeater Field Add-on](https://getbutterfly.com/wordpress-plugins/gravity-forms-repeater-plugin/)
+* [Fixtures & Results - WordPress Sports League & GAA Club Plugin](https://getbutterfly.com/wordpress-plugins/fixtures-and-results/)
+* [WP Google Consent Platform (GCP)](https://getbutterfly.com/wordpress-plugins/wp-gcp-a-wordpress-plugin-for-google-consent-mode-v2/)
+
 == Installation ==
 
 1. Log into your WordPress site
 2. Install and activate plugin
-3. Add a Font Awesome Icon block
+3. Add a Font Awesome Icon block and click "Choose icon"
+
+== Frequently Asked Questions ==
+
+= Do I need to know Font Awesome class names? =
+
+No. Click "Choose icon" and search by name or keyword. Class names are only needed for Font Awesome Pro or kit icons.
+
+= Will it slow my site down? =
+
+No. Free icons are inline SVG (usually under 1 KB each) and no Font Awesome script or font is loaded unless you turn one on in Settings → Font Awesome for Pro icons or kits.
+
+= I updated from an older version. Do I still need the Font Awesome script? =
+
+Not for Free icons in this block or the shortcodes; they now render as SVG. Keep the script on only if your theme or other content uses `<i class="fa-...">` markup, Pro icons or a kit.
+
+= Can I use the icons in the core Icon block? =
+
+Yes. On WordPress 7.1+ the core Icon block shows a "Font Awesome Free" tab. You can also transform between the two blocks.
 
 == Screenshots ==
 
-1. Front-end icon blocks
-2. Back-end icon blocks
-3. Icon settings
+1. Searchable icon picker
+2. Icon block settings
+3. Front-end icons
 4. Plugin settings
 
 == Changelog ==
+
+= 1.8.0 =
+* FEATURE: Visual, searchable icon picker (2,000+ Font Awesome Free 7.3.1 icons) with style filter and keyboard navigation
+* FEATURE: Free icons render as inline SVG, so no Font Awesome script is needed; new installs no longer load one by default
+* FEATURE: Font Awesome Free collection for the core Icon block (WordPress 7.1 icon API), with transforms between blocks
+* FEATURE: Color, typography (font size), spacing and anchor block supports
+* FEATURE: Accessible label option; decorative icons are hidden from screen readers
+* FEATURE: Icon feature list and social icons row patterns
+* UPDATE: Existing blocks and the `[fa]` / `[icon]` shortcodes render Free icons as SVG; Pro icons and kits still use the Font Awesome script
+* UPDATE: The block's default colour is now your text colour instead of black; blocks with a chosen colour keep it
+* FIX: Register the block from `block.json` and remove the invalid `parent` setting
+* FIX: `[icon prefix="fas"]` produced an invalid class
+* UPDATE: Requires WordPress 7.1 and PHP 8.0
 
 = 1.7.10 =
 * UPDATE: Update Font Awesome 7 to 7.3.1 and declare Block API version 3 metadata
@@ -231,3 +285,4 @@ Explore more [WordPress Plugins](https://getbutterfly.com/wordpress-plugins/).
 
 = 1.0.0 =
 * Initial release
+
